@@ -96,7 +96,7 @@ def process_prescription():
 def chat_consultation():
     data = request.get_json() or {}
     user_message = data.get('message', '')
-    
+
     if not llm:
         return jsonify({"text": "Error: Gemini AI is not initialized. Check your API keys."})
 
@@ -104,7 +104,7 @@ def chat_consultation():
         # Prompting Gemini to act as the HealthCurve Assistant
         prompt = f"You are Nova AI, a helpful medical assistant for the HealthCurve app. Answer this health query safely and concisely: {user_message}"
         response = llm.invoke(prompt)
-        
+
         return jsonify({"text": response.content})
     except Exception as e:
         print(f"Chat Error: {e}")
