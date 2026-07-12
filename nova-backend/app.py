@@ -82,7 +82,9 @@ def process_prescription():
         return jsonify({"timetable": fallback_timetable}), 200
 
     try:
-        temp_path = f"/tmp/{file.filename}"
+        import tempfile
+        temp_dir = tempfile.gettempdir()
+        temp_path = os.path.join(temp_dir, file.filename)
         file.save(temp_path)
         
         # Step 1: Vision Extraction via Sarvam AI
