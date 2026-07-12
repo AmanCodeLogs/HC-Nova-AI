@@ -344,16 +344,16 @@ body {
 }
 
 .chat-bubble {
-    max-width: 80%;
-    width: 400px;
+    max-width: 85%;
+    width: fit-content;
     padding: 12px 16px;
-    border-radius: 12px;
+    border-radius: 16px;
     border: 1px solid var(--border-color);
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.6;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .ai-msg .chat-bubble {
@@ -372,6 +372,7 @@ body {
 .bubble-sender {
     font-size: 11px;
     font-weight: 700;
+    margin-bottom: 2px;
 }
 
 .ai-msg .bubble-sender {
@@ -384,7 +385,32 @@ body {
 
 .bubble-text {
     color: var(--text-primary);
-    white-space: pre-line;
+}
+
+.bubble-text p {
+    margin-bottom: 8px;
+}
+
+.bubble-text p:last-child {
+    margin-bottom: 0;
+}
+
+.bubble-text ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.bubble-text li {
+    margin-bottom: 4px;
+}
+
+.bubble-text strong {
+    color: var(--accent-teal);
+    font-weight: 700;
+}
+
+.user-msg .bubble-text strong {
+    color: var(--accent-cyan);
 }
 
 /* Typing Indicator Bubble */
