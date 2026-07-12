@@ -1,6 +1,6 @@
 Flask==3.0.0
 flask-cors==4.0.0
-sarvam-ai==0.1.3
+sarvam-ai
 langchain-google-genai==1.0.0
 gunicorn==21.2.0
 python-dotenv
