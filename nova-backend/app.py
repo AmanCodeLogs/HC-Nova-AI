@@ -156,6 +156,33 @@ def process_prescription():
         return jsonify({"timetable": fallback_timetable}), 200
 
 
+# Helper to query the patient's schedule from Neo4j Graph DB
+def get_patient_timetable():
+    if not neo4j_driver:
+        return []
+    
+    query = """
+    MATCH (p:Patient {id: "CurrentPatient"})-[:TAKES]->(m:Medicine)
+    OPTIONAL MATCH (m)-[:SCHEDULED_AT]->(t:TimeSlot)
+    RETURN m.name AS medicine, m.dosage AS dosage, m.instructions AS instructions, t.time AS time
+    """
+    try:
+        with neo4j_driver.session() as session:
+            result = session.run(query)
+            return [
+                {
+                    "medicine": record["medicine"],
+                    "dosage": record["dosage"] or "",
+                    "instructions": record["instructions"] or "",
+                    "time": record["time"] or ""
+                }
+                for record in result
+            ]
+    except Exception as e:
+        print(f"Neo4j Fetch Error: {e}")
+        return []
+
+
 # ==========================================
 # 4. NOVA AI CHAT ASSISTANT
 # ==========================================
@@ -168,10 +195,25 @@ def chat_consultation():
         return jsonify({"text": "Error: AI engine offline. Check credentials."})
 
     try:
-        # Contextual prompt engineering for medical guardrails
-        prompt = f"You are Nova AI, a helpful medical assistant for the HealthCurve app. Answer this health query safely and concisely: {user_message}"
-        response = llm.invoke(prompt)
+        # Fetch current graph DB timetable context
+        timetable = get_patient_timetable()
+        timetable_context = ""
+        if timetable:
+            timetable_context = "The patient's current medication timetable (retrieved from their Neo4j profile) is:\n"
+            for item in timetable:
+                timetable_context += f"- {item['medicine']}: Dosage: {item['dosage']}, Time: {item['time']}, Instructions: {item['instructions']}\n"
+        else:
+            timetable_context = "The patient currently has no medications registered in their timetable.\n"
 
+        # Contextual prompt engineering for medical guardrails and graph database knowledge
+        prompt = f"""You are Nova AI, a helpful medical assistant for the HealthCurve app. 
+You have access to the patient's active prescription timetable context.
+
+{timetable_context}
+
+Answer this health query safely, concisely, and contextually using the patient's prescription data if appropriate: {user_message}"""
+        
+        response = llm.invoke(prompt)
         return jsonify({"text": response.content})
     except Exception as e:
         print(f"Chat Error: {e}")
