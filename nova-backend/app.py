@@ -6,7 +6,7 @@ from flask_cors import CORS
 # AI and Graph Database Drivers
 from sarvamai import SarvamAI
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from neo4j import GraphDatabase
 
 app = Flask(__name__)
