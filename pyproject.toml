@@ -1,0 +1,6 @@
+[project]
+name = "healthcurve-nova-ai"
+version = "0.1.0"
+dependencies = [
+    "flet==0.85.3"
+]
