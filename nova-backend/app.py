@@ -2,6 +2,7 @@ import os
 import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 # AI and Graph Database Drivers
 from sarvamai import SarvamAI
@@ -83,13 +84,46 @@ def process_prescription():
 
     try:
         import tempfile
+        import zipfile
+        import shutil
+        
         temp_dir = tempfile.gettempdir()
         temp_path = os.path.join(temp_dir, file.filename)
         file.save(temp_path)
         
         # Step 1: Vision Extraction via Sarvam AI
         print("Executing Document Digitization...")
-        vision_response = sarvam_client.document_digitization.digitize(file_path=temp_path, language="en-IN", output_format="md")
+        
+        # Create and run a Document Intelligence Job on Sarvam AI
+        job = sarvam_client.document_intelligence.create_job(
+            language="en-IN",
+            output_format="md"
+        )
+        job.upload_file(temp_path)
+        job.start()
+        
+        status = job.wait_until_complete()
+        print(f"Job completed: {status.job_state}")
+        
+        # Download and extract the result
+        zip_path = os.path.join(temp_dir, "ocr_output.zip")
+        job.download_output(zip_path)
+        
+        extract_dir = os.path.join(temp_dir, "ocr_extracted")
+        if os.path.exists(extract_dir):
+            shutil.rmtree(extract_dir)
+        os.makedirs(extract_dir, exist_ok=True)
+        
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_dir)
+            
+        # Read the extracted markdown/text content
+        vision_response = ""
+        for filename in os.listdir(extract_dir):
+            if filename.endswith(".md") or filename.endswith(".txt"):
+                with open(os.path.join(extract_dir, filename), "r", encoding="utf-8") as f:
+                    vision_response = f.read()
+                break
         
         # Step 2: Structured JSON Formatting via LangChain + Gemini
         print("Structuring data with Gemini LLM...")
