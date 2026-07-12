@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthCurve Nova AI</title>
+    <link rel="icon" type="image/png" href="app_icon.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    
+    <!-- Link to External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <img src="app_icon.png" alt="HealthCurve Logo" class="header-icon">
+            <div class="header-titles">
+                <h1>HealthCurve Nova AI</h1>
+                <p>Next-Gen Intelligent Healthcare Companion</p>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" id="tab-tracker-btn" onclick="switchTab('tracker')">
+                <span class="material-symbols-rounded">track_changes</span>
+                Prescription Tracker
+            </button>
+            <button class="tab-btn" id="tab-chat-btn" onclick="switchTab('chat')">
+                <span class="material-symbols-rounded">chat</span>
+                Nova AI Chat Assistant
+            </button>
+        </nav>
+
+        <!-- Dynamic Panels -->
+        <div class="views-container">
+            <!-- Panel 1: Prescription Tracker -->
+            <div class="view-panel active" id="panel-tracker">
+                <p class="view-description">Upload a prescription image to digitize and extract a personalized medication timetable.</p>
+                <div class="upload-row">
+                    <label for="prescription-upload" class="upload-btn-label">
+                        <span class="material-symbols-rounded">upload_file</span>
+                        Upload Prescription
+                    </label>
+                    <input type="file" id="prescription-upload" accept="image/*" onchange="uploadPrescription(event)">
+                    <div class="spinner" id="tracker-spinner"></div>
+                </div>
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 15px;">
+                <h2 class="timetable-section-title">Extracted Timetable</h2>
+                <div class="timetable-list" id="timetable-content">
+                    <div class="empty-timetable">No medication schedules extracted. Try uploading a photo.</div>
+                </div>
+            </div>
+
+            <!-- Panel 2: Nova AI Chat Assistant -->
+            <div class="view-panel" id="panel-chat">
+                <div class="chat-history" id="chat-messages">
+                    <div class="chat-row ai-msg">
+                        <div class="chat-bubble">
+                            <span class="bubble-sender">Nova AI</span>
+                            <span class="bubble-text">Hello! I am Nova AI, your HealthCurve assistant. Ask me questions about your medications, dosage instructions, or general health concerns.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-row">
+                    <input type="text" id="chat-message-input" placeholder="Ask Nova AI about your prescriptions or symptoms..." onkeydown="handleChatSubmit(event)">
+                    <button id="chat-send-btn" onclick="sendChatMessage()">
+                        <span class="material-symbols-rounded">send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Toast Overlay -->
+    <div class="snackbar" id="toast-notification">
+        <span class="material-symbols-rounded snackbar-icon">error</span>
+        <span id="toast-message">Error processing command.</span>
+    </div>
+
+    <!-- Link to External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
