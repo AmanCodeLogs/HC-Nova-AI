@@ -4,6 +4,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 # AI and Graph Database Drivers
 from sarvamai import SarvamAI
@@ -118,12 +120,15 @@ def process_prescription():
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_dir)
             
-        # Read the extracted markdown/text content
+        # Read the extracted markdown/text content recursively
         vision_response = ""
-        for filename in os.listdir(extract_dir):
-            if filename.endswith(".md") or filename.endswith(".txt"):
-                with open(os.path.join(extract_dir, filename), "r", encoding="utf-8") as f:
-                    vision_response = f.read()
+        for root_dir, dirs, files in os.walk(extract_dir):
+            for filename in files:
+                if filename.endswith(".md") or filename.endswith(".txt"):
+                    with open(os.path.join(root_dir, filename), "r", encoding="utf-8") as f:
+                        vision_response = f.read()
+                    break
+            if vision_response:
                 break
         
         # Step 2: Structured JSON Formatting via LangChain + Gemini
