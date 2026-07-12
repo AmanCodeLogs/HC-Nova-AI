@@ -1,9 +1,4 @@
-// Dynamically detect environment: use local Flask URL when running locally, otherwise use production API
-const BACKEND_URL = (
-    window.location.hostname === "localhost" || 
-    window.location.hostname === "127.0.0.1" || 
-    window.location.protocol === "file:"
-) ? "http://localhost:5000" : "https://hc-nova-ai.onrender.com";
+const BACKEND_URL = "https://hc-nova-ai.onrender.com";
 
 // Tab Switching
 function switchTab(tabId) {
@@ -123,8 +118,8 @@ async function sendChatMessage() {
     userRow.className = 'chat-row user-msg';
     userRow.innerHTML = `
         <div class="chat-bubble">
-            <span class="bubble-sender">You</span>
-            <span class="bubble-text">${escapeHTML(text)}</span>
+            <div class="bubble-sender">You</div>
+            <div class="bubble-text">${parseMarkdown(text)}</div>
         </div>
     `;
     history.appendChild(userRow);
@@ -171,8 +166,8 @@ async function sendChatMessage() {
         aiRow.className = 'chat-row ai-msg';
         aiRow.innerHTML = `
             <div class="chat-bubble">
-                <span class="bubble-sender">Nova AI</span>
-                <span class="bubble-text">${escapeHTML(aiText)}</span>
+                <div class="bubble-sender">Nova AI</div>
+                <div class="bubble-text">${parseMarkdown(aiText)}</div>
             </div>
         `;
         history.appendChild(aiRow);
@@ -193,6 +188,54 @@ function handleChatSubmit(event) {
         event.preventDefault();
         sendChatMessage();
     }
+}
+
+// Simple markdown parsing to HTML safely
+function parseMarkdown(text) {
+    if (!text) return "";
+    
+    // First, escape HTML for safety
+    let html = escapeHTML(text);
+    
+    // Parse Headings (e.g. ### Heading)
+    html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+    
+    // Parse Bold (e.g. **text**)
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Parse Bullet lists (lines starting with * or - followed by a space)
+    let lines = html.split('\n');
+    let inList = false;
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (line.startsWith('* ') || line.startsWith('- ')) {
+            let content = line.substring(2);
+            if (!inList) {
+                lines[i] = '<ul><li>' + content + '</li>';
+                inList = true;
+            } else {
+                lines[i] = '<li>' + content + '</li>';
+            }
+        } else {
+            if (inList) {
+                lines[i] = '</ul>' + (line ? '<p>' + line + '</p>' : '');
+                inList = false;
+            } else {
+                if (line) {
+                    // Avoid wrapping h1/h2/h3 in p tags
+                    if (!line.startsWith('<h') && !line.startsWith('<u') && !line.startsWith('<l')) {
+                        lines[i] = '<p>' + line + '</p>';
+                    }
+                }
+            }
+        }
+    }
+    if (inList) {
+        lines.push('</ul>');
+    }
+    return lines.join('\n');
 }
 
 // Simple HTML Escaping utility for chat bubbles
