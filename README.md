@@ -21,22 +21,18 @@ Production-ready Python Flask backend for **HealthCurve Nova AI**, built for the
    ```bash
    git clone [https://github.com/YOUR_USERNAME/nova-backend.git](https://github.com/YOUR_USERNAME/nova-backend.git)
    cd nova-backend
-
-##Install the required packages:
-
-Bash
-pip install -r requirements.txt
 Configure your environment keys:
 
-Bash
+Configure your environment keys:
+
+2.Bash
 export SARVAM_API_KEY="your_sarvam_api_key"
 export GEMINI_API_KEY="your_gemini_api_key"
 Launch the API locally:
 
-Bash
+3.Bash
 python app.py
-
-##🌐 Endpoints
+🌐 Endpoints
 📋 Process Prescription
 URL: /api/ocr/process
 
@@ -46,7 +42,7 @@ Payload: multipart/form-data with an image file attached to the prescription key
 
 Returns: A JSON array containing structured medication cards (medicine, dosage, time, instructions, taken).
 
-##💬 Patient Chat Consultation
+💬 Patient Chat Consultation
 URL: /api/chat
 
 Method: POST
