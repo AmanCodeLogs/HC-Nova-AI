@@ -23,7 +23,7 @@ NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD", "password")
 
 try:
     sarvam_client = SarvamAI(api_subscription_key=SARVAM_KEY) if SARVAM_KEY != "MISSING" else None
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", api_key=GEMINI_KEY) if GEMINI_KEY != "MISSING" else None
+    llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", api_key=GEMINI_KEY) if GEMINI_KEY != "MISSING" else None
     neo4j_driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 except Exception as e:
     print(f"Initialization Error: {e}")
