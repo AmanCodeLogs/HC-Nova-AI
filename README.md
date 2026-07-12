@@ -1,15 +1,15 @@
-# HealthCurve Nova AI - Backend API
+# HealthCurve Nova AI
 
+Production-ready Python Flask backend for **HealthCurve Nova AI**, built for the HACKHAZARDS '26 hackathon. This API serves as the central orchestration layer—connecting the frontend client to Sarvam AI Document Intelligence, Neo4j Graph Database, and LangChain-managed Gemini models for structured medical tracking.
+
+
+## 🛠️ Tech Stack
 [![Render](https://img.shields.io/badge/Render-%2346E3B7.svg?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
 [![Netlify](https://img.shields.io/badge/Netlify-%2300C7B7.svg?style=for-the-badge&logo=netlify&logoColor=white)](https://www.netlify.com)
 [![Neo4j](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)](https://neo4j.com)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75C2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
 [![Sarvam AI](https://img.shields.io/badge/Sarvam_AI-orange?style=for-the-badge&logo=openai&logoColor=white)](https://www.sarvam.ai)
 
-Production-ready Python Flask backend for **HealthCurve Nova AI**, built for the HACKHAZARDS '26 hackathon. This API serves as the central orchestration layer—connecting the frontend client to Sarvam AI Document Intelligence, Neo4j Graph Database, and LangChain-managed Gemini models for structured medical tracking.
-
-
-## 🛠️ Tech Stack
 * **Framework:** Python & Flask
 * **Security:** Flask-CORS (Cross-Origin Resource Sharing)
 * **Vision & OCR:** Sarvam AI Python SDK (`document_intelligence` Job API)
@@ -81,8 +81,11 @@ Production-ready Python Flask backend for **HealthCurve Nova AI**, built for the
 
 
 ## 🌐 Live Deployments
-* **Backend API (Render):** [https://hc-nova-ai.onrender.com](https://hc-nova-ai.onrender.com)
+
 * **Frontend Web App (Netlify):** [https://hc-nova-ai.netlify.app/](https://hc-nova-ainetlify.app/)
+
+* **Backend API (Render):** [https://hc-nova-ai.onrender.com](https://hc-nova-ai.onrender.com)
+
 
 ## ☁️ Deployment Instructions
 
